@@ -5,7 +5,7 @@ let figlet = require('figlet');
 const showBanner =()=>{
     console.clear();
     return new Promise((resolve, reject)=>{
-        figlet('vhugoJC',{font: 'Doh'}, (err, data)=> {
+        figlet('hugoJC',{font: 'Doh'}, (err, data)=> {
             if (err) {
                 reject(err);
             }

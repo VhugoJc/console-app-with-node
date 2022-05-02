@@ -10,6 +10,7 @@ class Task{
         this.descript = descript;
         this.completed=null;
     }
+
 }
 
 module.exports = Task;
