@@ -43,6 +43,27 @@ class Taks{
             }
         })
     }
+
+    deleteTask(id){
+        if(this._list[id]){
+            delete this._list[id];
+        }
+    }
+
+    toggleCompleted(ids=[]){
+        ids.forEach(id=>{
+            const task = this._list[id];
+            if(!task.completed){
+                task.completed = new Date().toString();
+            }
+        })
+
+        this.ArrList.forEach(task=>{
+            if(!ids.includes(task.id)){
+                this._list[task.id].completed=null;
+            }
+        })
+    }
 }
 
 module.exports = Taks;

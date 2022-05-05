@@ -1,5 +1,5 @@
 require("colors");
-const { inquirerMenu, inquirerPause, readInput } = require("./helper/inquirer");
+const { inquirerMenu, inquirerPause, readInput, deleteTasks,showCheckList } = require("./helper/inquirer");
 const Taks = require("./models/tasks");
 const { saveDB, readDB } = require("./helper/handleDB");
 
@@ -17,7 +17,7 @@ let opt = 1;
   {
     opt = await inquirerMenu();
     opt = opt.option;
-    
+  
     switch (opt) {
       case "1":
         const description = await readInput("Descripción: ");
@@ -33,13 +33,22 @@ let opt = 1;
       case "4":
         tasks.handleCompletedTask(false);
         break;
+      case "5":
+        const ids = await showCheckList(tasks.ArrList);
+        tasks.toggleCompleted(ids);
+        break;
+      case "6":
+        const idTaskToDelete = await deleteTasks(tasks.ArrList);
+        if(idTaskToDelete!==null){
+          tasks.deleteTask(idTaskToDelete);
+        }
     }
     saveDB(tasks.ArrList);
     
     console.log("\n");
     await inquirerPause();
     
-  } while (opt.option != "0");
+  } while (opt!== "0");
 };
 
 main();

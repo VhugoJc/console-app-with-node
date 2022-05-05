@@ -51,7 +51,6 @@ const inquirerMenu = async () => {
     console.log(err);
   }
 };
-
 const inquirerPause = async () => {
     const pauseOptions = [
         {
@@ -66,8 +65,7 @@ const inquirerPause = async () => {
     console.log(err);
   }
 };
-
-const readInput = async (message) => {
+const readInput =async (message) => {
     const question = [
         {
             type: 'input',
@@ -85,4 +83,76 @@ const readInput = async (message) => {
     const {desc} = await inquirer.prompt(question);
     return desc;
 }
-module.exports = { inquirerMenu, inquirerPause,readInput };
+const deleteTasks = async  (tasks=[]) =>{
+  const choices= tasks.map((task,index)=>{
+    return{
+      value: task.id,
+      name: `${`${index}`.green} ${task.descript}`
+    }
+  });
+  choices.unshift({value:0,name:'Cancelar'}); //add to the begin
+  const questions=[
+    {
+      type: 'list',
+      name:'id',
+      message:'¿Que tarea desea borrar?',
+      choices
+    }
+  ]
+  const {id} = await inquirer.prompt(questions);
+
+  if(id===0){
+    return null;
+  }
+
+  const answer = await confirmAction('Estas seguro de eliminar esta tarea?')
+
+  if(answer){
+    return id;
+  }
+
+  return null;
+}
+const confirmAction=async(message)=>{
+  const question = [
+    {
+      type:'list',
+      name:'answer',
+      message,
+      choices:[
+        {
+          name: `${`Si`.green}, Estoy seguro`,
+          value:true
+        },
+        {
+          name: `${`No`.red}, Cancelar`,
+          value:true
+        }
+      ]
+    }
+  ]
+
+  const {answer} = await inquirer.prompt(question);
+  return answer;
+}
+const showCheckList = async  (tasks=[]) =>{
+  const choices= tasks.map((task,index)=>{
+    return{
+      value: task.id,
+      name: `${`${index}`.green} ${task.descript}`,
+      checked: task.completed ?true :false
+    }
+  });
+ 
+  const questions=[
+    {
+      type: 'checkbox',
+      name:'ids',
+      message:'¿Que tarea desea completar?',
+      choices
+    }
+  ]
+  const {ids} = await inquirer.prompt(questions);
+  return ids;
+}
+module.exports = { inquirerMenu, inquirerPause,readInput, deleteTasks, showCheckList};
